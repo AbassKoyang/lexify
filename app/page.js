@@ -14,19 +14,19 @@ export default function Home() {
   const font = useSelector(selectFont);
   const [FONT, setFONT] = useState(notoserif);
   useEffect(() => {
-    if (font === 'serif') {
+    if (localStorage.font === 'serif') {
       setFONT(notoserif);
-    } else if(font === 'roboto') {
+    } else if(localStorage.font === 'roboto') {
       setFONT(roboto);
-    } else if (font === 'poppins') {
+    } else if (localStorage.font === 'poppins') {
       setFONT(poppins);
-    } else if (font === 'worksans') {
+    } else if (localStorage.font === 'worksans') {
       setFONT(worksans);
-    } else if (font === 'notosans') {
+    } else if (localStorage.font === 'notosans') {
       setFONT(notosans);
-    } else if (font === 'montserrat') {
+    } else if (localStorage.font === 'montserrat') {
       setFONT(montserrat);
-    } else if (font === 'inter') {
+    } else if (localStorage.font === 'inter') {
       setFONT(inter);
     };
   }, [font]);

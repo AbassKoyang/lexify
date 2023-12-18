@@ -74,7 +74,8 @@ const Header = () => {
       dispatch(setFonts(event.target.value));
       localStorage.setItem('font', event.target.value);
       localStorage.font = event.target.value;
-    };
+      event.target.value = localStorage.font;
+    }; 
   return (
     <header className={`w-full flex items-center justify-between`}>
         <Link href='/' aria-label='Logo (Dictionary Icon)' className='flex items-center gap-1 md:gap-2'>
@@ -83,10 +84,10 @@ const Header = () => {
         </Link>
 
         <div className="flex items-center gap-3">
-            <select aria-label='Font switcher: Select your preferred font' onChange={handleFontChange} name="font-select" id="fontSelect" className='w-20 bg-white dark:bg-[#050505] text-black/70 dark:text-white cursor-pointer font-medium outline-0'>
+            <select aria-label='Font switcher: Select your preferred font' value={localStorage.font} onChange={handleFontChange} name="font-select" id="fontSelect" className='w-20 bg-white dark:bg-[#050505] text-black/70 dark:text-white cursor-pointer font-medium outline-0'>
                 <option value="serif" aria-label='Select Serif font' aria-selected={font === 'serif'} className='w-full text-black dark:text-white cursor-pointer text-sm md:text-lg'>Serif</option>
                 <option value="roboto" aria-label='Select Roboto font' aria-selected={font === 'roboto'} className='w-full text-black dark:text-white cursor-pointer text-sm md:text-lg'>Roboto</option>
-                <option value="Poppins" aria-label='Select Poppins font' aria-selected={font === 'poppins'} className='w-full text-black dark:text-white cursor-pointer text-sm md:text-lg'>Poppins</option>
+                <option value="poppins" aria-label='Select Poppins font' aria-selected={font === 'poppins'} className='w-full text-black dark:text-white cursor-pointer text-sm md:text-lg'>Poppins</option>
                 <option value="montserrat" aria-label='Select Montserrat font' aria-selected={font === 'montserrat'} className='w-full text-black dark:text-white cursor-pointer text-sm md:text-lg'>Montserrat</option>
                 <option value="notosans" aria-label='Select Notosans font' aria-selected={font === 'notosans'} className='w-full text-black dark:text-white cursor-pointer text-sm md:text-lg'>Noto Sans</option>
                 <option value="worksans" aria-label='Select Worksans font' aria-selected={font === 'worksans'} className='w-full text-black dark:text-white cursor-pointer text-sm md:text-lg'>Work Sans</option>
