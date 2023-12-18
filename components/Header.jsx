@@ -5,11 +5,15 @@ import React from 'react';
 import Link from 'next/link';
 import { BiMoon, BiBookAlt } from "react-icons/bi";
 import { RiComputerLine, RiMoonLine, RiSunLine } from "react-icons/ri";
+import { useDispatch, useSelector } from 'react-redux';
+import { setFonts, selectFont } from '@/redux/fontSlice'; 
 
 
-const Header = ({font}) => {
+const Header = () => {
     const [theme, setTheme] = useState('dark');
     const [activeTheme, setActiveTheme] = useState('system');
+    const dispatch = useDispatch();
+    const font = useSelector(selectFont);
 
     useEffect(() => {
       if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -29,7 +33,25 @@ const Header = ({font}) => {
       } else if (localStorage.theme === 'system') {
         setActiveTheme('system');
       }
-    }, [activeTheme])
+    }, [activeTheme]);
+
+    useEffect(() => {
+      if (localStorage.font === 'serif') {
+        dispatch(setFonts('serif'));
+      } else if(localStorage.font === 'roboto') {
+        dispatch(setFonts('roboto'));
+      } else if (localStorage.font === 'poppins') {
+        dispatch(setFonts('poppins'));
+      } else if (localStorage.font === 'worksans') {
+        dispatch(setFonts('worksans'));
+      } else if (localStorage.font === 'notosans') {
+        dispatch(setFonts('notosans'));
+      } else if (localStorage.font === 'montserrat') {
+        dispatch(setFonts('montserrat'));
+      } else if (localStorage.font === 'inter') {
+        dispatch(setFonts('inter'));
+      };
+    }, [font]);
     
   
     const setLight = () => {
@@ -42,26 +64,33 @@ const Header = ({font}) => {
       localStorage.theme = 'dark';
       setTheme('dark');
       setActiveTheme('dark');
-    }
+    };
     const setSystem = () => {
       localStorage.removeItem('theme');
       setTheme('system');
       setActiveTheme('system');
     }
     const handleFontChange = (event) => {
-      setSelectedFont(event.target.value);
-    }
+      dispatch(setFonts(event.target.value));
+      localStorage.setItem('font', event.target.value);
+      localStorage.font = event.target.value;
+    };
   return (
-    <header className={`w-full flex items-center justify-between ${font}`}>
+    <header className={`w-full flex items-center justify-between`}>
         <Link href='/' aria-label='Logo (Dictionary Icon)' className='flex items-center gap-1 md:gap-2'>
         <BiBookAlt className='w-6 h-6 md:w-8 md:h-8'/>
-        <p className='font-medium text-xl md:text-2xl font-roboto'>Lexify</p>
+        <p className='font-medium text-xl md:text-2xl'>Lexify</p>
         </Link>
 
         <div className="flex items-center gap-3">
-            <select onChange={handleFontChange} name="font-select" id="fontSelect" className='w-20 bg-white dark:bg-[#050505] text-black/70 dark:text-white cursor-pointer font-medium outline-0'>
-                <option value="font-serif" className='w-full text-black dark:text-white cursor-pointer text-sm md:text-lg'>Serif</option>
-                <option value="font-roboto" className='w-full text-black dark:text-white cursor-pointer text-sm md:text-lg'>Roboto</option>
+            <select aria-label='Font switcher: Select your preferred font' onChange={handleFontChange} name="font-select" id="fontSelect" className='w-20 bg-white dark:bg-[#050505] text-black/70 dark:text-white cursor-pointer font-medium outline-0'>
+                <option value="serif" aria-label='Select Serif font' aria-selected={font === 'serif'} className='w-full text-black dark:text-white cursor-pointer text-sm md:text-lg'>Serif</option>
+                <option value="roboto" aria-label='Select Roboto font' aria-selected={font === 'roboto'} className='w-full text-black dark:text-white cursor-pointer text-sm md:text-lg'>Roboto</option>
+                <option value="Poppins" aria-label='Select Poppins font' aria-selected={font === 'poppins'} className='w-full text-black dark:text-white cursor-pointer text-sm md:text-lg'>Poppins</option>
+                <option value="montserrat" aria-label='Select Montserrat font' aria-selected={font === 'montserrat'} className='w-full text-black dark:text-white cursor-pointer text-sm md:text-lg'>Montserrat</option>
+                <option value="notosans" aria-label='Select Notosans font' aria-selected={font === 'notosans'} className='w-full text-black dark:text-white cursor-pointer text-sm md:text-lg'>Noto Sans</option>
+                <option value="worksans" aria-label='Select Worksans font' aria-selected={font === 'worksans'} className='w-full text-black dark:text-white cursor-pointer text-sm md:text-lg'>Work Sans</option>
+                <option value="inter" aria-label='Select Inter font' aria-selected={font === 'inter'} className='w-full text-black dark:text-white cursor-pointer text-sm md:text-lg'>Inter</option>
             </select>
             <div role='radiogroup' className="flex gap-0 rounded-full p-1 border border-[#ebebebs] dark:border-[#2e2e2e]">
                 <button aria-checked={`${activeTheme === 'dark'? 'true' : 'false'}`} aria-label='Switch to dark theme' role='radio' onClick={setDark} className={`group rounded-full p-2  ${activeTheme === 'dark'? 'bg-[#E6E6E6] dark:bg-[#292929]' : ''}`}>
