@@ -82,21 +82,23 @@ export default function Home() {
       <div className='w-full max-w-2xl h-full flex flex-col items-center justify-center bg-white dark:bg-black'>
         <Header />
         <SearchBar fetchWord={fetchWord} />
-        {wordData ? (
-            <WordDetails wordData={wordData} />
-        ) : (
+        {isLoading ? (
           <div className='w-full h-[500px] lg:h-[300px] flex flex-col items-center justify-center'>
-           {
-             isLoading ? (
-              <BounceLoader color='#A646ED' />
+          <BounceLoader color='#A646ED' />
+          </div>
+        ) : (
+           <>
+            {
+             wordData ? (
+              <WordDetails wordData={wordData} />
             ) : (
-              <>
-                <RiSearch2Line className='w-28 h-28 text-[#E9D0FA]' />
-                <p className='text-sm mt-3 text-center'>Search any english word. 🚀</p>
-              </>
+                <div className='w-full h-[500px] lg:h-[300px] flex flex-col items-center justify-center'>
+                  <RiSearch2Line className='w-28 h-28 text-[#E9D0FA]' />
+                  <p className='text-sm mt-3 text-center'>Search any english word. 🚀</p>
+                </div>
             )
            }
-          </div>
+           </>
         )}
       </div>
     </main>
