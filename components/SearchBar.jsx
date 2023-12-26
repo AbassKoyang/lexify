@@ -32,25 +32,27 @@ const handleQueryChange = (event) => {
 
 const handleFetchWord =()=> {
   if(query === ''){
-    if(localStorage.theme === 'light'){
-      toast.warn('Searchbar is empty', {
-        position: toast.POSITION.TOP_CENTER,
-        theme: 'dark'
-      })
-    }
-    if(localStorage.theme === 'dark'){
-      toast.warn('Searchbar is empty', {
-        position: toast.POSITION.TOP_CENTER,
-        theme: 'light'
-      })
-    }
-    if(!localStorage.theme){
-      toast.warn('Searchbar is empty', {
-        position: toast.POSITION.TOP_CENTER,
-        theme: 'colored',
-        style: {backgroundColor: '#A646ED'},
-        progressStyle: {backgroundColor: '#CBB6E6'},
-      })
+    if(typeof window !== undefined){
+      if(localStorage.theme === 'light'){
+        toast.warn('Searchbar is empty', {
+          position: toast.POSITION.TOP_CENTER,
+          theme: 'dark'
+        })
+      }
+      if(localStorage.theme === 'dark'){
+        toast.warn('Searchbar is empty', {
+          position: toast.POSITION.TOP_CENTER,
+          theme: 'light'
+        })
+      }
+      if(!localStorage.theme){
+        toast.warn('Searchbar is empty', {
+          position: toast.POSITION.TOP_CENTER,
+          theme: 'colored',
+          style: {backgroundColor: '#A646ED'},
+          progressStyle: {backgroundColor: '#CBB6E6'},
+        })
+      }
     }
   } else{
     let isDuplicate = recentSearches.includes(query);
@@ -61,7 +63,9 @@ const handleFetchWord =()=> {
       updatedSearches = [query, ...recentSearches.slice(0, 4)];
     };
     setRecentSearches(updatedSearches);
-    localStorage.setItem('recentSearches', JSON.stringify(updatedSearches));
+    if(typeof window !== undefined){
+      localStorage.setItem('recentSearches', JSON.stringify(updatedSearches));
+    }
     setIsTyping(false);
     fetchWord();
   }
@@ -76,12 +80,16 @@ const handleRecentSearchClick = (search) => {
 const clearRecentSearch = (searchToRemove) => {
   const updatedSearches = recentSearches.filter((search) => search !== searchToRemove);
   setRecentSearches(updatedSearches);
+  if(typeof window !== undefined){
   localStorage.setItem('recentSearches', JSON.stringify(updatedSearches));
+  }
 };
 
 const clearAllRecentSearches = () => {
   setRecentSearches([]);
+  if(typeof window !== undefined){
   localStorage.removeItem('recentSearches');
+  }
 };
 
 const filteredRecentSearches = recentSearches.filter((search) =>

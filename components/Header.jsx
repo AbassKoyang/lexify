@@ -69,26 +69,34 @@ const Header = () => {
     
   
     const setLight = () => {
+      if(typeof window !== undefined){
       localStorage.theme = 'light';
+      }
       setTheme('light');
       setActiveTheme('light');
     }
     const setDark = () => {
+      if(typeof window !== undefined){
       localStorage.setItem('theme', 'dark')
       localStorage.theme = 'dark';
+      }
       setTheme('dark');
       setActiveTheme('dark');
     };
     const setSystem = () => {
+      if(typeof window !== undefined){
       localStorage.removeItem('theme');
+      }
       setTheme('system');
       setActiveTheme('system');
     }
     const handleFontChange = (event) => {
       dispatch(setFonts(event.target.value));
+      if(typeof window !== undefined){
       localStorage.setItem('font', event.target.value);
       localStorage.font = event.target.value;
       event.target.value = localStorage.font;
+      }
     }; 
   return (
     <header className={`w-full flex items-center justify-between`}>
