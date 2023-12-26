@@ -50,7 +50,21 @@ const Header = () => {
         dispatch(setFonts('montserrat'));
       } else if (localStorage.font === 'inter') {
         dispatch(setFonts('inter'));
-      };
+      } else if (localStorage.font === 'inconsolata') {
+        dispatch(setFonts('inconsolata'));
+      } else if (localStorage.font === 'ubuntu') {
+        dispatch(setFonts('ubuntu'));
+      } else if (localStorage.font === 'sevillana') {
+        dispatch(setFonts('sevillana'));
+      } else if (localStorage.font === 'diphylleia') {
+        dispatch(setFonts('diphylleia'));
+      } else if (localStorage.font === 'lobster') {
+        dispatch(setFonts('lobster'));
+      } else if (localStorage.font === 'cairo') {
+        dispatch(setFonts('cairo'));
+      } else if (localStorage.font === 'pacifico') {
+        dispatch(setFonts('pacifico'));
+      }
     }, [font]);
     
   
@@ -92,6 +106,13 @@ const Header = () => {
                 <option value="notosans" aria-label='Select Notosans font' aria-selected={font === 'notosans'} className='w-full text-black dark:text-white cursor-pointer text-sm md:text-lg'>Noto Sans</option>
                 <option value="worksans" aria-label='Select Worksans font' aria-selected={font === 'worksans'} className='w-full text-black dark:text-white cursor-pointer text-sm md:text-lg'>Work Sans</option>
                 <option value="inter" aria-label='Select Inter font' aria-selected={font === 'inter'} className='w-full text-black dark:text-white cursor-pointer text-sm md:text-lg'>Inter</option>
+                <option value="inconsolata" aria-label='Select Inter font' aria-selected={font === 'inconsolata'} className='w-full text-black dark:text-white cursor-pointer text-sm md:text-lg'>Inconsolata</option>
+                <option value="sevillana" aria-label='Select Inter font' aria-selected={font === 'sevillana'} className='w-full text-black dark:text-white cursor-pointer text-sm md:text-lg'>Sevillana</option>
+                <option value="cairo" aria-label='Select Inter font' aria-selected={font === 'cairo'} className='w-full text-black dark:text-white cursor-pointer text-sm md:text-lg'>Cairo</option>
+                <option value="diphylleia" aria-label='Select Inter font' aria-selected={font === 'diphylleia'} className='w-full text-black dark:text-white cursor-pointer text-sm md:text-lg'>Diphylleia</option>
+                <option value="pacifico" aria-label='Select Inter font' aria-selected={font === 'pacifico'} className='w-full text-black dark:text-white cursor-pointer text-sm md:text-lg'>Pacifico</option>
+                <option value="lobster" aria-label='Select Inter font' aria-selected={font === 'lobster'} className='w-full text-black dark:text-white cursor-pointer text-sm md:text-lg'>Lobster</option>
+                <option value="ubuntu" aria-label='Select Inter font' aria-selected={font === 'ubuntu'} className='w-full text-black dark:text-white cursor-pointer text-sm md:text-lg'>Ubuntu</option>
             </select>
             <div role='radiogroup' className="flex gap-0 rounded-full p-1 border border-[#ebebebs] dark:border-[#2e2e2e]">
                 <button aria-checked={`${activeTheme === 'dark'? 'true' : 'false'}`} aria-label='Switch to dark theme' role='radio' onClick={setDark} className={`group rounded-full p-2  ${activeTheme === 'dark'? 'bg-[#E6E6E6] dark:bg-[#292929]' : ''}`}>

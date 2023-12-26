@@ -8,14 +8,18 @@ import WordDetails from '@/components/WordDetails';
 import { useSelector } from 'react-redux';
 import { selectFont } from '@/redux/fontSlice';
 import { selectSearchQuery } from '@/redux/searchSlice';
-import { inter, poppins, montserrat, worksans, notoserif, notosans, roboto } from './layout';
+import { inter, poppins, montserrat, worksans, notoserif, notosans, roboto, diphylleia, sevillana, ubuntu, lobster, inconsolata, cairo, pacifico } from './layout';
 import { fetchWordData } from '@/utils';
+import { RiSearch2Line } from 'react-icons/ri';
+import {BounceLoader} from 'react-spinners'
+import { CarRepairRounded } from '@mui/icons-material';
 
 
 export default function Home() {
   const query = useSelector(selectSearchQuery);
   const [wordData, setWordData] = useState(null);
   const font = useSelector(selectFont);
+  const [isLoading, setIsLoading] = useState(false);
   const [FONT, setFONT] = useState(notoserif);
   useEffect(() => {
     if (localStorage.font === 'serif') {
@@ -32,10 +36,25 @@ export default function Home() {
       setFONT(montserrat);
     } else if (localStorage.font === 'inter') {
       setFONT(inter);
-    };
+    } else if (localStorage.font === 'diphylleia') {
+      setFONT(diphylleia);
+    } else if (localStorage.font === 'sevillana') {
+      setFONT(sevillana);
+    }else if (localStorage.font === 'inconsolata') {
+      setFONT(inconsolata);
+    } else if (localStorage.font === 'ubuntu') {
+      setFONT(ubuntu);
+    } else if (localStorage.font === 'cairo') {
+      setFONT(cairo);
+    } else if (localStorage.font === 'pacifico') {
+      setFONT(pacifico);
+    } else if (localStorage.font === 'lobster') {
+      setFONT(lobster);
+    }
   }, [font]);
 
   const fetchWord = async () => {
+    setIsLoading(true);
     try {
         const word = await fetchWordData(query);
         
@@ -53,19 +72,30 @@ export default function Home() {
         }
     } catch (error) {
         console.error('Error fetching word:', error);
+    } finally{
+      setIsLoading(false);
     }
 };
 
   return (
-    <main className={`flex min-h-screen flex-col items-center justify-center text-black dark:text-white bg-white dark:bg-[#050505] p-5 lg:p-24 ${FONT.className}`}>
-      <div className='w-full max-w-2xl min-h-screen bg-white dark:bg-black'>
+    <main className={`flex ${wordData ? 'min-h-screen' : 'h-screen'} flex-col items-center justify-center text-black dark:text-white bg-white dark:bg-[#050505] p-5 lg:px-24 lg:pt-24 ${FONT.className}`}>
+      <div className='w-full max-w-2xl h-full flex flex-col items-center justify-center bg-white dark:bg-black'>
         <Header />
         <SearchBar fetchWord={fetchWord} />
         {wordData ? (
-          <WordDetails wordData={wordData} />
+            <WordDetails wordData={wordData} />
         ) : (
-          <div className='w-full flex items-center justify-center'>
-            <h1>Search for a word</h1>
+          <div className='w-full h-[500px] lg:h-[300px] flex flex-col items-center justify-center'>
+           {
+             isLoading ? (
+              <BounceLoader color='#A646ED' />
+            ) : (
+              <>
+                <RiSearch2Line className='w-28 h-28 text-[#E9D0FA]' />
+                <p className='text-sm mt-3 text-center'>Search any english word. 🚀</p>
+              </>
+            )
+           }
           </div>
         )}
       </div>

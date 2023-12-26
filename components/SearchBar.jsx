@@ -1,6 +1,6 @@
 'use client'
-import React from 'react'
-import { RiSearch2Line } from 'react-icons/ri';
+import React, { useState, useEffect, useRef } from 'react'
+import { RiCloseLine, RiSearch2Line } from 'react-icons/ri';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectFont } from '@/redux/fontSlice';
 import { selectSearchQuery, setSearchQuery } from '@/redux/searchSlice';
@@ -8,12 +8,25 @@ import { toast, ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 
 const SearchBar = ({fetchWord}) => {
+
 const query = useSelector(selectSearchQuery);
 const dispatch = useDispatch();
+const [recentSearches, setRecentSearches] = useState([]);
+const [isTyping, setIsTyping] = useState(false);
+const inputRef = useRef(null);
+
+useEffect(() => {
+  const storedSearches = localStorage.recentSearches;
+  if (storedSearches) {
+    setRecentSearches(JSON.parse(storedSearches));
+  }
+}, []);
+
 const handleQueryChange = (event) => {
     dispatch(setSearchQuery(event.target.value));
     console.log(query);
-}
+};
+
 const handleFetchWord =()=> {
   if(query === ''){
     if(localStorage.theme === 'light'){
@@ -37,15 +50,60 @@ const handleFetchWord =()=> {
       })
     }
   } else{
+    const updatedSearches = [query, ...recentSearches.slice(0, 4)];
+    setRecentSearches(updatedSearches);
+    localStorage.setItem('recentSearches', JSON.stringify(updatedSearches));
+    setIsTyping(false);
     fetchWord();
   }
 }
+
+const handleRecentSearchClick = (search) => {
+  dispatch(setSearchQuery(search));
+  inputRef.current.value = search;
+  setIsTyping(false);
+};
+
+const clearRecentSearch = (searchToRemove) => {
+  const updatedSearches = recentSearches.filter((search) => search !== searchToRemove);
+  setRecentSearches(updatedSearches);
+  localStorage.setItem('recentSearches', JSON.stringify(updatedSearches));
+};
+
+const clearAllRecentSearches = () => {
+  setRecentSearches([]);
+  localStorage.removeItem('recentSearches');
+};
   return (
-    <div className={`w-full flex items-center justify-between px-3 py-2 bg-[#F4F4F4] dark:bg-[#1F1F1F] rounded-md mt-10 group`}>
-        <input onChange={handleQueryChange} placeholder='Search any english word' type="text" className='w-full h-full bg-transparent outline-0 border-none input' />
+    <div className={`w-full flex flex-col px-3 py-2 bg-[#F4F4F4] dark:bg-[#1F1F1F] rounded-md mt-10 group`}>
+        <div className="w-full h-full flex items-center justify-between">
+        <input ref={inputRef} onChange={handleQueryChange} onFocus={() => setIsTyping(true)} onKeyDown={(e) => { if (e.key === 'Enter') { handleFetchWord();}}}  placeholder='Search any english word' type="text" className='w-full h-full bg-transparent outline-0 border-none input' />
         <button onClick={handleFetchWord} className='ml-2 rounded-full p-1 focus:bg-[#E9D0FA] hover:bg-[#E9D0FA] input-focus:bg-[#E9D0FA]'>
           <RiSearch2Line className='w-4 h-4 text-[#A646ED]' />
         </button>
+        </div>
+        <div className={`w-full p-4 mt-3 transition-all duration-500 ${isTyping ? 'block h-fit' : 'hidden h-0'}`}>
+          <h1 className='text-lg text-gray-600'>Recents</h1>
+          {
+            recentSearches.length > 0 ?
+            (<ul className="w-full flex flex-col flex-wrap gap-2 my-3" id="searchHistory">
+              {recentSearches.map((search, index) => (
+                <li onClick={() => handleRecentSearchClick(search)} className='w-full flex items-center justify-between p-2 hover:bg-[#cdafe46c] rounded-sm cursor-pointer' key={index}>
+                  <p className='text-sm text-[#A646ED]'>{search}</p>
+                  <button onClick={(event) =>{event.stopPropagation(); clearRecentSearch(search);}} className='p-1 hover:bg-slate-200 dark:hover:bg-slate-400 focus:bg-slate-200 rounded-full'><RiCloseLine className='w-4 h-4 text-gray-800 dark:text-white/60' /></button>
+                </li>
+              ))} 
+              </ul> 
+             ): (
+              <p>No recent searches.</p>
+             )
+          }
+          <div className="w-full flex items-center justify-end">
+          {localStorage.recentSearches && (
+            <button onClick={() => clearAllRecentSearches()} className='text-sm text-gray-500 font-medium px-2 py-0.5 rounded-full hover:bg-slate-200 dark:hover:bg-slate-400'>Clear all</button>
+          )}
+          </div>
+        </div>
         <ToastContainer />
     </div>
   )
