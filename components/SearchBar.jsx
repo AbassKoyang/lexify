@@ -15,9 +15,11 @@ const [recentSearches, setRecentSearches] = useState([]);
 const [isTyping, setIsTyping] = useState(false);
 const inputRef = useRef(null);
 const [inputValue, setInputValue] = useState('');
+const [localStorageState, setLocalStorageState] = useState({});
 const containerRef = useRef(null);
 
 useEffect(() => {
+  setLocalStorageState(localStorage);
   const storedSearches = localStorage.recentSearches;
   if (storedSearches) {
     setRecentSearches(JSON.parse(storedSearches));
@@ -33,19 +35,19 @@ const handleQueryChange = (event) => {
 const handleFetchWord =()=> {
   if(query === ''){
     if(typeof window !== undefined){
-      if(localStorage.theme === 'light'){
+      if(localStorageState.theme === 'light'){
         toast.warn('Searchbar is empty', {
           position: toast.POSITION.TOP_CENTER,
           theme: 'dark'
         })
       }
-      if(localStorage.theme === 'dark'){
+      if(localStorageState.theme === 'dark'){
         toast.warn('Searchbar is empty', {
           position: toast.POSITION.TOP_CENTER,
           theme: 'light'
         })
       }
-      if(!localStorage.theme){
+      if(!localStorageState.theme){
         toast.warn('Searchbar is empty', {
           position: toast.POSITION.TOP_CENTER,
           theme: 'colored',
@@ -64,7 +66,7 @@ const handleFetchWord =()=> {
     };
     setRecentSearches(updatedSearches);
     if(typeof window !== undefined){
-      localStorage.setItem('recentSearches', JSON.stringify(updatedSearches));
+      localStorageState.setItem('recentSearches', JSON.stringify(updatedSearches));
     }
     setIsTyping(false);
     fetchWord();
@@ -81,14 +83,14 @@ const clearRecentSearch = (searchToRemove) => {
   const updatedSearches = recentSearches.filter((search) => search !== searchToRemove);
   setRecentSearches(updatedSearches);
   if(typeof window !== undefined){
-  localStorage.setItem('recentSearches', JSON.stringify(updatedSearches));
+  localStorageState.setItem('recentSearches', JSON.stringify(updatedSearches));
   }
 };
 
 const clearAllRecentSearches = () => {
   setRecentSearches([]);
   if(typeof window !== undefined){
-  localStorage.removeItem('recentSearches');
+  localStorageState.removeItem('recentSearches');
   }
 };
 
@@ -120,7 +122,7 @@ useEffect(() => {
         </div>
         <div className={`w-full p-4 mt-3 transition-all duration-500 ${isTyping ? 'block scale-100' : 'hidden scale-0'}`}>
         {
-          localStorage.recentSearches && inputValue.length === 0 && (
+          localStorageState.recentSearches && inputValue.length === 0 && (
             <h1 className='text-lg text-gray-600'>Recent searches</h1>
           )
         }
@@ -157,7 +159,7 @@ useEffect(() => {
           }
 
           <div className="w-full flex items-center justify-end">
-          {localStorage.recentSearches && inputValue.length === 0 && (
+          {localStorageState.recentSearches && inputValue.length === 0 && (
             <button onClick={() => clearAllRecentSearches()} className='text-sm text-gray-500 font-medium px-2 py-0.5 rounded-full hover:bg-slate-200 dark:hover:bg-slate-400'>Clear all</button>
           )}
           </div>

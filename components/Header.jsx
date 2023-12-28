@@ -14,8 +14,10 @@ const Header = () => {
     const [activeTheme, setActiveTheme] = useState('system');
     const dispatch = useDispatch();
     const font = useSelector(selectFont);
+    const [localStorageState, setLocalStorageState] = useState({});
 
     useEffect(() => {
+      setLocalStorageState(localStorage);
       if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
         document.documentElement.classList.add('dark')
       } else {
@@ -70,32 +72,33 @@ const Header = () => {
   
     const setLight = () => {
       if(typeof window !== undefined){
-      localStorage.theme = 'light';
+      localStorageState.theme = 'light';
       }
       setTheme('light');
       setActiveTheme('light');
     }
     const setDark = () => {
       if(typeof window !== undefined){
-      localStorage.setItem('theme', 'dark')
-      localStorage.theme = 'dark';
+      localStorageState.setItem('theme', 'dark')
+      localStorageState.theme = 'dark';
       }
       setTheme('dark');
       setActiveTheme('dark');
     };
     const setSystem = () => {
       if(typeof window !== undefined){
-      localStorage.removeItem('theme');
+      localStorageState.removeItem('theme');
       }
       setTheme('system');
       setActiveTheme('system');
+      console.log(localStorageState.font);
     }
     const handleFontChange = (event) => {
       dispatch(setFonts(event.target.value));
       if(typeof window !== undefined){
-      localStorage.setItem('font', event.target.value);
-      localStorage.font = event.target.value;
-      event.target.value = localStorage.font;
+      localStorageState.setItem('font', event.target.value);
+      localStorageState.font = event.target.value;
+      event.target.value = localStorageState.font;
       }
     }; 
   return (
@@ -106,7 +109,7 @@ const Header = () => {
         </Link>
 
         <div className="flex items-center gap-3">
-            <select aria-label='Font switcher: Select your preferred font' value={localStorage.font} onChange={handleFontChange} name="font-select" id="fontSelect" className='w-20 bg-white dark:bg-[#050505] text-black/70 dark:text-white cursor-pointer font-medium outline-0'>
+            <select aria-label='Font switcher: Select your preferred font' value={localStorageState.font} onChange={handleFontChange} name="font-select" id="fontSelect" className='w-20 bg-white dark:bg-[#050505] text-black/70 dark:text-white cursor-pointer font-medium outline-0'>
                 <option value="serif" aria-label='Select Serif font' aria-selected={font === 'serif'} className='w-full text-black dark:text-white cursor-pointer text-sm md:text-lg'>Serif</option>
                 <option value="roboto" aria-label='Select Roboto font' aria-selected={font === 'roboto'} className='w-full text-black dark:text-white cursor-pointer text-sm md:text-lg'>Roboto</option>
                 <option value="poppins" aria-label='Select Poppins font' aria-selected={font === 'poppins'} className='w-full text-black dark:text-white cursor-pointer text-sm md:text-lg'>Poppins</option>

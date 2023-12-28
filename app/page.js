@@ -54,6 +54,7 @@ export default function Home() {
   }, [font]);
 
   const fetchWord = async () => {
+    console.log(FONT)
     setIsLoading(true);
     try {
         const word = await fetchWordData(query);
