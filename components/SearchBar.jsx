@@ -152,12 +152,6 @@ useEffect(() => {
             )
           }
 
-          {
-            inputValue.length > 0 && filteredRecentSearches.length === 0 && (
-              <p>No matching searches</p>
-            )
-          }
-
           <div className="w-full flex items-center justify-end">
           {localStorageState.recentSearches && inputValue.length === 0 && (
             <button onClick={() => clearAllRecentSearches()} className='text-sm text-gray-500 font-medium px-2 py-0.5 rounded-full hover:bg-slate-200 dark:hover:bg-slate-400'>Clear all</button>

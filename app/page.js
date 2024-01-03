@@ -71,6 +71,7 @@ export default function Home() {
                 console.log(word);
             }
         }
+
     } catch (error) {
         console.error('Error fetching word:', error);
     } finally{
